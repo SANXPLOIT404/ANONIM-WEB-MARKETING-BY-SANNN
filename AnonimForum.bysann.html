@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnonimMarket by SANNZ</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+      /* === CSS FITUR BARU === */
+      
+      .payment-method {
+  font-size: 12px;
+  color: #666;
+  margin: 5px 0;
+  padding: 3px 8px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+.escrow-badge {
+  background: #28a745;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  margin-left: 5px;
+}      
+/* Dark Mode */
+.dark-mode {
+  background: #121212;
+  color: #ffffff;
+}
+.dark-mode header {
+  background: linear-gradient(135deg, #1a1a1a, #333);
+}
+.dark-mode nav {
+  background: #1e1e1e;
+  color: white;
+}
+.dark-mode .produk {
+  background: #2d2d2d;
+  color: white;
+}
+.dark-mode input, .dark-mode textarea, .dark-mode select {
+  background: #333;
+  color: white;
+  border-color: #555;
+}
+.dark-mode .advanced-filter {
+  background: #2d2d2d;
+}
+.dark-mode .transaction-hash {
+  background: #333;
+}
+
+/* Rating Stars */
+.rating-input {
+  direction: rtl;
+  display: inline-block;
+}
+.rating-input input {
+  display: none;
+}
+.rating-input label {
+  font-size: 24px;
+  color: #ddd;
+  cursor: pointer;
+}
+.rating-input input:checked ~ label {
+  color: #ffc107;
+}
+.rating-input label:hover,
+.rating-input label:hover ~ label {
+  color: #ffc107;
+}
+
+/* Notification Badge */
+.notification-badge {
+  background: #ff4757;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+/* Auction Countdown */
+.countdown {
+  background: #ff6b6b;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+/* Achievement Badges */
+.achievement-badge {
+  display: inline-block;
+  background: #ffd700;
+  color: #000;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  margin: 2px;
+  font-weight: bold;
+}
+
+/* AR Preview Button */
+.ar-preview {
+  background: #17a2b8;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+/* Language Selector */
+.language-selector {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+/* Advanced Filter Panel */
+.advanced-filter {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Cloud Sync Status */
+.sync-status {
+  position: fixed;
+  bottom: 60px;
+  left: 20px;
+  background: #28a745;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  z-index: 999;
+}
+
+/* Multi-step Form */
+.form-step {
+  display: none;
+}
+.form-step.active {
+  display: block;
+}
+
+/* Blockchain-like Hash Display */
+.transaction-hash {
+  font-family: monospace;
+  background: #f8f9fa;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 10px;
+  word-break: break-all;
+}
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(135deg, #007bff, #6610f2);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    nav {
+      background: #fff;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav .menu a {
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+      color: #333;
+      transition: 0.3s;
+    }
+    nav .menu a:hover {
+      color: #007bff;
+    }
+
+    nav .search {
+      flex: 1;
+      margin: 0 20px;
+    }
+
+    nav input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      outline: none;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #444;
+    }
+
+    .produk-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .produk {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: 0.3s;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      position: relative;
+    }
+    .produk:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .produk img {
+      max-width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .produk h3 {
+      font-size: 18px;
+      margin: 10px 0 5px;
+      color: #007bff;
+    }
+
+    .produk p {
+      font-size: 14px;
+      color: #555;
+      flex-grow: 1;
+    }
+
+    .harga {
+      font-size: 18px;
+      font-weight: bold;
+      color: #28a745;
+      margin: 10px 0;
+    }
+
+    .btn {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #007bff, #6610f2);
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover {
+      background: linear-gradient(135deg, #6610f2, #007bff);
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #222;
+      color: white;
+      margin-top: 30px;
+    }
+
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: auto;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0,123,255,0.5);
+    }
+
+    /* CSS baru untuk fitur tambahan */
+    .detail-produk {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    
+    .detail-produk img {
+      max-width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .detail-info {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .detail-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+    
+    .btn-success {
+      background: #28a745;
+    }
+    
+    .btn-success:hover {
+      background: #218838;
+    }
+    
+    .btn-warning {
+      background: #ffc107;
+      color: #212529;
+    }
+    
+    .btn-warning:hover {
+      background: #e0a800;
+    }
+    
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-bar select, .filter-bar input {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    
+    .rating {
+      color: #ffc107;
+      margin: 5px 0;
+    }
+    
+    .favorite-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #ccc;
+      transition: 0.3s;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+    }
+    
+    .favorite-btn.active {
+      color: #ff4757;
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      background: #28a745;
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      z-index: 1001;
+      display: none;
+    }
+    
+    .tab-menu {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+      flex-wrap: wrap;
+    }
+    
+    .tab-menu button {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+    
+    .tab-menu button.active {
+      border-bottom: 3px solid #007bff;
+      color: #007bff;
+    }
+    
+    .user-id {
+      background: #f8f9fa;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #6c757d;
+      margin-left: 10px;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    
+    .status-diproses {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .status-selesai {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+    
+    .status-batal {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .dashboard-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #007bff;
+    }
+    
+    .blur-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    
+    .blurred {
+      filter: blur(5px);
+      transition: filter 0.3s;
+    }
+    
+    .install-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+      z-index: 999;
+      display: none;
+    }
+    
+    .similar-products {
+      margin-top: 30px;
+    }
+    
+    .wishlist-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #ccc;
+      transition: 0.3s;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 2;
+    }
+    
+    .wishlist-btn.active {
+      color: #ff4757;
+    }
+    
+    .encryption-badge {
+      background: #17a2b8;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      margin-left: 5px;
+    }
+    
+    .dashboard-tab {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+        
+    <!-- Tambahkan di dalam <header> setelah elemen yang sudah ada -->
+<div class="language-selector">
+  <select id="languageSelect" onchange="changeLanguage()">
+    <option value="id">🇮🇩 Indonesia</option>
+    <option value="en">🇺🇸 English</option>
+  </select>
+</div>
+
+<!-- Tambahkan di dalam <header> setelah blur-toggle -->
+<div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+  <div class="blur-toggle">
+    <input type="checkbox" id="blurMode" onchange="toggleBlurMode()">
+    <label for="blurMode">Mode Samarkan Gambar</label>
+  </div>
+  
+  <div class="blur-toggle">
+    <input type="checkbox" id="darkMode" onchange="toggleDarkMode()">
+    <label for="darkMode">🌙 Mode Gelap</label>
+  </div>
+</div>
+
+<!-- Achievement Display -->
+<div id="achievementDisplay" style="margin-top: 10px; font-size: 12px;"></div>
+
+<!-- Tambahkan di <nav> menu -->
+<a href="#" onclick="showPage('auction')">Lelang</a>
+<a href="#" onclick="showPage('analytics')">Analytics</a>
+
+<!-- Tambahkan badge notifikasi di menu -->
+<a href="#" onclick="showPage('home')">Home <span id="notifHome" class="notification-badge" style="display: none">0</span></a>
+<a href="#" onclick="showPage('dashboard')">Dashboard <span id="notifDashboard" class="notification-badge" style="display: none">0</span></a>
+
+<!-- Panel Pencarian Lanjutan -->
+<div id="advancedSearchPanel" class="advanced-filter" style="display: none;">
+  <h3>🔍 Pencarian Lanjutan</h3>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+    <div>
+      <label>Rating Minimal:</label>
+      <select id="searchRating" onchange="advancedSearch()">
+        <option value="0">Semua Rating</option>
+        <option value="4">⭐ 4+</option>
+        <option value="3">⭐ 3+</option>
+        <option value="2">⭐ 2+</option>
+        <option value="1">⭐ 1+</option>
+      </select>
+    </div>
+    <div>
+      <label>Penjual Terverifikasi:</label>
+      <select id="searchVerified" onchange="advancedSearch()">
+        <option value="">Semua Penjual</option>
+        <option value="verified">Terverifikasi</option>
+      </select>
+    </div>
+    <div>
+      <label>Urutkan berdasarkan:</label>
+      <select id="searchSort" onchange="advancedSearch()">
+        <option value="relevansi">Relevansi</option>
+        <option value="terbaru">Terbaru</option>
+        <option value="popularitas">Popularitas</option>
+        <option value="reputasi">Reputasi Penjual</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Halaman Baru (tambahkan sebelum footer) -->
+<div class="container" id="auctionPage" style="display:none;">
+  <h2>⚡ Produk Lelang</h2>
+  <div class="produk-grid" id="auctionList"></div>
+</div>
+
+<div class="container" id="analyticsPage" style="display:none;">
+  <h2>📊 Analytics & Statistik</h2>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number" id="totalViews">0</div>
+      <div>Total Dilihat</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="conversionRate">0%</div>
+      <div>Conversion Rate</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="avgSession">0m</div>
+      <div>Rata-rata Sesi</div>
+    </div>
+  </div>
+</div>
+
+<div class="container" id="reviewsPage" style="display:none;">
+  <h2>⭐ Ulasan & Rating</h2>
+  <div id="reviewsList"></div>
+</div>
+
+<!-- Cloud Sync Status -->
+<div id="syncStatus" class="sync-status" style="display: none;">🔄 Syncing...</div>
+  <!-- Install Prompt -->
+  <button id="installBtn" class="install-btn">📲 Install App</button>
+  
+  <!-- Notifikasi -->
+  <div id="notification" class="notification"></div>
+    
+  <button class="btn" onclick="openChatGlobal()">🌐 Global Chat <span class="encryption-badge">E2E</span></button>
+  
+  <!-- Chat Modal - SUDAH DIPERBAIKI -->
+  <div id="chatModal" style="position:fixed; bottom:20px; right:20px; width:300px; max-height:400px; background:#fff; border:1px solid #ccc; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:1000; display:none; flex-direction:column;">
+    <div style="background:#007bff; color:white; padding:10px; display:flex; justify-content:space-between; align-items:center; font-weight:bold;">
+      <span id="chatModalTitle">Chat <span class="encryption-badge">E2E</span></span>
+      <button onclick="closeChat()" style="background:none;border:none;color:white;cursor:pointer;font-size:16px;">✖</button>
+    </div>
+    <div id="chatMessages" style="flex:1; padding:10px; overflow-y:auto; font-size:14px; background:#f0f0f0;"></div>
+    <div style="display:flex; padding:8px; gap:5px;">
+      <input type="text" id="chatInput" placeholder="Tulis pesan..." style="flex:1; padding:6px; border-radius:5px; border:1px solid #ccc;">
+      <button onclick="sendMessage()" style="padding:6px 10px; background:#007bff; color:white; border:none; border-radius:5px; cursor:pointer;">Kirim</button>
+    </div>
+  </div>
+
+  <header>
+    <h1>🛒 AnonimMarket by SANNZ</h1>
+    <p>Marketplace digital anonim • ID: <span id="userID" class="user-id">Loading...</span></p>
+    <div class="blur-toggle">
+      <input type="checkbox" id="blurMode" onchange="toggleBlurMode()">
+      <label for="blurMode">Mode Samarkan Gambar</label>
+    </div>
+  </header>
+
+  <nav>
+    <div class="menu">
+      <a href="#" onclick="showPage('home')">Home</a>
+      <a href="#" onclick="showPage('tambah')">Tambah Produk</a>
+      <a href="#" onclick="showPage('dashboard')">Dashboard</a>
+      <a href="#" onclick="showPage('favorit')">Favorit</a>
+      <a href="#" onclick="showPage('wishlist')">Wishlist</a>
+      <a href="#" onclick="showPage('riwayat')">Riwayat</a>
+    </div>
+    <div class="search">
+      <input type="text" id="searchBox" placeholder="Cari produk..." onkeyup="cariProduk()">
+    </div>
+  </nav>
+
+  <!-- Home -->
+  <div class="container" id="homePage">
+    <h2> Produk Terbaru </h2>
+    
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <select id="filterKategori" onchange="filterProduk()">
+        <option value="">Semua Kategori</option>
+        <option value="Ebook">Ebook</option>
+        <option value="Template">Template</option>
+        <option value="Musik">Musik</option>
+        <option value="Software">Software</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+      
+      <select id="sortBy" onchange="sortProduk()">
+        <option value="terbaru">Terbaru</option>
+        <option value="termurah">Harga Terendah</option>
+        <option value="termahal">Harga Tertinggi</option>
+        <option value="rating">Rating Tertinggi</option>
+        <option value="populer">Paling Populer</option>
+      </select>
+      
+      <input type="number" id="hargaMin" placeholder="Harga Min" onchange="filterProduk()">
+      <input type="number" id="hargaMax" placeholder="Harga Max" onchange="filterProduk()">
+    </div>
+    
+    <div class="produk-grid" id="produkList"></div>
+  </div>
+
+  <!-- Detail Produk -->
+  <div class="container" id="detailPage" style="display:none;">
+    <button class="btn btn-secondary" onclick="showPage('home')">← Kembali</button>
+    <div id="detailContent" class="detail-produk"></div>
+    
+    <!-- Produk Serupa -->
+    <div class="similar-products">
+      <h3>🔍 Produk Serupa</h3>
+      <div class="produk-grid" id="similarProducts"></div>
+    </div>
+  </div>
+
+  <!-- Tambah Produk -->
+  <div class="container" id="tambahPage" style="display:none;">
+    <h2>Tambah Produk Baru</h2>
+    <form id="produkForm">
+      <input type="text" id="judul" placeholder="Judul Produk" required>
+      <textarea id="deskripsi" placeholder="Deskripsi Produk" required></textarea>
+      <input type="number" id="harga" placeholder="Harga (Rp)" required>
+      
+      <label for="gambarFile">Upload Gambar Produk:</label>
+      <input type="file" id="gambarFile" accept="image/*">
+
+      <select id="kategori" required>
+        <option value="">Pilih Kategori</option>
+        <option value="Ebook">Ebook</option>
+        <option value="Template">Template</option>
+        <option value="Musik">Musik</option>
+        <option value="Software">Software</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+      
+      <select id="metodePembayaran" required>
+        <option value="">Metode Pembayaran</option>
+        <option value="Transfer Bank">Transfer Bank</option>
+        <option value="E-Wallet">E-Wallet</option>
+        <option value="Crypto">Crypto</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+      
+      <input type="text" id="kontak" placeholder="Link Pembelian (WA/Telegram/IG)" required>
+      
+      <div>
+        <input type="checkbox" id="gunakanEscrow" checked>
+        <label for="gunakanEscrow">Gunakan Sistem Escrow (Dana ditahan sampai barang diterima)</label>
+      </div>
+      
+      <button type="submit" class="btn">🚀 Posting Produk</button>
+    </form>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="container" id="dashboardPage" style="display:none;">
+    <h2>📊 Dashboard Penjual</h2>
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="totalProduk">0</div>
+        <div>Total Produk</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="produkAktif">0</div>
+        <div>Produk Aktif</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="totalPenjualan">0</div>
+        <div>Total Penjualan</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="ratingAverage">0</div>
+        <div>Rating Rata-rata</div>
+      </div>
+    </div>
+    
+    <div class="tab-menu">
+      <button class="active" onclick="openDashboardTab('produkSaya')">Produk Saya</button>
+      <button onclick="openDashboardTab('pesanan')">Pesanan</button>
+      <button onclick="openDashboardTab('statistik')">Statistik</button>
+    </div>
+    
+    <div id="dashboardProdukSaya" class="dashboard-tab">
+      <h3>Produk Saya</h3>
+      <div class="produk-grid" id="produkSayaList"></div>
+    </div>
+    
+    <div id="dashboardPesanan" class="dashboard-tab" style="display:none;">
+      <h3>Pesanan</h3>
+      <div id="pesananList"></div>
+    </div>
+    
+    <div id="dashboardStatistik" class="dashboard-tab" style="display:none;">
+      <h3>Statistik Penjualan</h3>
+      <div id="statistikContent">
+        <p>Grafik statistik akan ditampilkan di sini (dalam pengembangan)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Halaman Favorit -->
+  <div class="container" id="favoritPage" style="display:none;">
+    <h2>Produk Favorit</h2>
+    <div class="produk-grid" id="favoritList"></div>
+  </div>
+
+  <!-- Halaman Wishlist -->
+  <div class="container" id="wishlistPage" style="display:none;">
+    <h2>⭐ Wishlist</h2>
+    <div class="produk-grid" id="wishlistList"></div>
+  </div>
+
+  <!-- Halaman Riwayat -->
+  <div class="container" id="riwayatPage" style="display:none;">
+    <h2>📋 Riwayat Produk yang Dilihat</h2>
+    <div class="produk-grid" id="riwayatList"></div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 AnonimMarket by SANNZ | Semua transaksi diarahkan via kontak | <span id="onlineStatus">🟢 Online</span></p>
+  </footer>
+
+  <script>
+    // Data dan inisialisasi
+    let produk = JSON.parse(localStorage.getItem("produk")) || [];
+    let favorit = JSON.parse(localStorage.getItem("favorit")) || [];
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    let riwayat = JSON.parse(localStorage.getItem("riwayat")) || [];
+    let pesanan = JSON.parse(localStorage.getItem("pesanan")) || [];
+    let userID = localStorage.getItem("userID") || generateUserID();
+    let currentChatKey = '';
+    let userName = 'User_' + userID.substring(0, 4);
+    let blurMode = localStorage.getItem("blurMode") === "true";
+    let deferredPrompt;
+
+    // Inisialisasi
+    document.getElementById('userID').textContent = userID;
+    localStorage.setItem("userID", userID);
+    document.getElementById('blurMode').checked = blurMode;
+    
+    // Generate random user ID
+    function generateUserID() {
+      return 'USER_' + Math.random().toString(36).substr(2, 9).toUpperCase();
+    }
+
+    // Toggle blur mode
+    function toggleBlurMode() {
+      blurMode = document.getElementById('blurMode').checked;
+      localStorage.setItem("blurMode", blurMode);
+      tampilkanProduk(produk);
+    }
+
+    // PWA Install Prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installBtn').style.display = 'block';
+    });
+
+    document.getElementById('installBtn').addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          document.getElementById('installBtn').style.display = 'none';
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    // Online/Offline detection
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    function updateOnlineStatus() {
+      const statusElement = document.getElementById('onlineStatus');
+      if (navigator.onLine) {
+        statusElement.innerHTML = '🟢 Online';
+        statusElement.style.color = '#28a745';
+      } else {
+        statusElement.innerHTML = '🔴 Offline';
+        statusElement.style.color = '#dc3545';
+        showNotification('Anda sedang offline. Beberapa fitur mungkin terbatas.');
+      }
+    }
+
+    // Fungsi navigasi halaman
+    function showPage(page) {
+      document.getElementById("homePage").style.display = (page === "home") ? "block" : "none";
+      document.getElementById("tambahPage").style.display = (page === "tambah") ? "block" : "none";
+      document.getElementById("detailPage").style.display = (page === "detail") ? "block" : "none";
+      document.getElementById("dashboardPage").style.display = (page === "dashboard") ? "block" : "none";
+      document.getElementById("favoritPage").style.display = (page === "favorit") ? "block" : "none";
+      document.getElementById("wishlistPage").style.display = (page === "wishlist") ? "block" : "none";
+      document.getElementById("riwayatPage").style.display = (page === "riwayat") ? "block" : "none";
+      
+      if (page === "home") tampilkanProduk(produk);
+      if (page === "favorit") tampilkanFavorit();
+      if (page === "wishlist") tampilkanWishlist();
+      if (page === "riwayat") tampilkanRiwayat();
+      if (page === "dashboard") {
+        openDashboardTab('produkSaya');
+        tampilkanProdukSaya();
+      }
+    }
+
+    // Fungsi menampilkan produk
+    function tampilkanProduk(data) {
+  let list = document.getElementById("produkList");
+  list.innerHTML = "";
+  
+  data.forEach((p, index) => {
+    let isFavorit = favorit.includes(p.judul);
+    let isWishlist = wishlist.includes(p.judul);
+    
+    list.innerHTML += `
+      <div class="produk" onclick="bukaDetail(${index})">
+        <button class="favorite-btn ${isFavorit ? 'active' : ''}" onclick="toggleFavorit(event, '${p.judul}')">${isFavorit ? '❤️' : '🤍'}</button>
+        <button class="wishlist-btn ${isWishlist ? 'active' : ''}" onclick="toggleWishlist(event, '${p.judul}')">${isWishlist ? '⭐' : '☆'}</button>
+        <img src="${p.gambar || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="Gambar Produk" class="${blurMode ? 'blurred' : ''}">
+        <h3>${p.judul}</h3>
+        <p>${p.deskripsi}</p>
+        <div class="harga">Rp ${p.harga}</div>
+        <div><small><strong>Pembayaran:</strong> ${p.metodePembayaran || 'Transfer Bank'}</small></div>
+        <div class="rating">${generateRating(p.rating || 0)}</div>
+        ${p.gunakanEscrow ? '<span class="encryption-badge" style="font-size:10px; margin:5px 0;">Escrow</span>' : ''}
+        <a href="${p.kontak}" target="_blank" class="btn" onclick="event.stopPropagation(); tambahRiwayat('${p.judul}')">💬 Hubungi Penjual</a>
+      </div>
+    `;
+  });
+}
+    function generateRating(rating) {
+      let stars = '';
+      for (let i = 1; i <= 5; i++) {
+        stars += i <= rating ? '⭐' : '☆';
+      }
+      return stars;
+    }
+
+    // Fungsi detail produk
+    function bukaDetail(index) {
+      let p = produk[index];
+      tambahRiwayat(p.judul);
+      
+      document.getElementById("detailContent").innerHTML = `
+        <img src="${p.gambar || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="Gambar Produk" class="${blurMode ? 'blurred' : ''}">
+        <div class="detail-info">
+          <h2>${p.judul}</h2>
+          <p>${p.deskripsi}</p>
+          <div class="harga">Rp ${p.harga}</div>
+          <div><strong>Kategori:</strong> ${p.kategori}</div>
+          <div><strong>Metode Pembayaran:</strong> ${p.metodePembayaran || 'Transfer Bank'}</div>
+          <div class="rating">${generateRating(p.rating || 0)}</div>
+          <div class="detail-actions">
+            <a href="${p.kontak}" target="_blank" class="btn">💬 Hubungi Penjual</a>
+            <button class="btn btn-secondary" onclick="openChatProduk('${p.judul}')">💬 Chat Produk</button>
+            <button class="btn btn-warning" onclick="toggleWishlist('${p.judul}')">⭐ Wishlist</button>
+            ${p.gunakanEscrow ? '<span class="encryption-badge">Escrow</span>' : ''}
+          </div>
+        </div>
+      `;
+      showPage('detail');
+      
+      // Tampilkan produk serupa
+      tampilkanProdukSerupa(p.kategori, p);
+    }
+
+    function tampilkanProdukSerupa(kategori, produkSaatIni) {
+      let list = document.getElementById("similarProducts");
+      list.innerHTML = "";
+      
+      let produkSerupa = produk.filter(p => 
+        p.kategori === kategori && p.judul !== produkSaatIni.judul
+      ).slice(0, 4);
+      
+      if (produkSerupa.length === 0) {
+        list.innerHTML = "<p>Tidak ada produk serupa.</p>";
+      } else {
+        produkSerupa.forEach((p, index) => {
+          let asliIndex = produk.findIndex(prod => prod.judul === p.judul);
+          list.innerHTML += `
+            <div class="produk" onclick="bukaDetail(${asliIndex})">
+              <img src="${p.gambar || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="Gambar Produk" class="${blurMode ? 'blurred' : ''}">
+              <h3>${p.judul}</h3>
+              <p>${p.deskripsi.substring(0, 50)}...</p>
+              <div class="harga">Rp ${p.harga}</div>
+            </div>
+          `;
+        });
+      }
+    }
+
+    // Fungsi favorit
+    function toggleFavorit(event, judul) {
+      if (event) event.stopPropagation();
+      let index = favorit.indexOf(judul);
+      if (index === -1) {
+        favorit.push(judul);
+        showNotification('Produk ditambahkan ke favorit');
+      } else {
+        favorit.splice(index, 1);
+        showNotification('Produk dihapus dari favorit');
+      }
+      localStorage.setItem("favorit", JSON.stringify(favorit));
+      tampilkanProduk(produk);
+    }
+
+    function tampilkanFavorit() {
+      let list = document.getElementById("favoritList");
+      list.innerHTML = "";
+      let favoritProduk = produk.filter(p => favorit.includes(p.judul));
+      
+      if (favoritProduk.length === 0) {
+        list.innerHTML = "<p>Belum ada produk favorit.</p>";
+      } else {
+        favoritProduk.forEach((p, index) => {
+          let asliIndex = produk.findIndex(prod => prod.judul === p.judul);
+          list.innerHTML += `
+            <div class="produk" onclick="bukaDetail(${asliIndex})">
+              <button class="favorite-btn active" onclick="toggleFavorit(event, '${p.judul}')">❤️</button>
+              <img src="${p.gambar || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="Gambar Produk" class="${blurMode ? 'blurred' : ''}">
+              <h3>${p.judul}</h3>
+              <p>${p.deskripsi}</p>
+              <div class="harga">Rp ${p.harga}</div>
+              <a href="${p.kontak}" target="_blank" class="btn">💬 Hubungi Penjual</a>
+            </div>
+          `;
+        });
+      }
+    }
+
+    // Fungsi wishlist
+    function toggleWishlist(event, judul) {
+      if (event) event.stopPropagation();
+      let index = wishlist.indexOf(judul);
+      if (index === -1) {
+        wishlist.push(judul);
+        showNotification('Produk ditambahkan ke wishlist');
+      } else {
+        wishlist.splice(index, 1);
+        showNotification('Produk dihapus dari wishlist');
+      }
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    }
+
+    function tampilkanWishlist() {
+      let list = document.getElementById("wishlistList");
+      list.innerHTML = "";
+      let wishlistProduk = produk.filter(p => wishlist.includes(p.judul));
+      
+      if (wishlistProduk.length === 0) {
+        list.innerHTML = "<p>Belum ada produk di wishlist.</p>";
+      } else {
+        wishlistProduk.forEach((p, index) => {
+          let asliIndex = produk.findIndex(prod => prod.judul === p.judul);
+          list.innerHTML += `
+            <div class="produk" onclick="bukaDetail(${asliIndex})">
+              <button class="wishlist-btn active" onclick="toggleWishlist(event, '${p.judul}')">⭐</button>
+              <img src="${p.gambar || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="Gambar Produk" class="${blurMode ? 'blurred' : ''}">
+              <h3>${p.judul}</h3>
+              <p>${p.deskripsi}</p>
+              <div class="harga">Rp ${p.harga}</div>
+              <a href="${p.kontak}" target="_blank" class="btn">💬 Hubungi Penjual</a>
+            </div>
+          `;
+        });
+      }
+    }
+
+    // Fungsi riwayat
+    function tambahRiwayat(judul) {
+      if (!riwayat.includes(judul)) {
+        riwayat.unshift(judul);
+        if (riwayat.length > 10) {
+          riwayat = riwayat.slice(0, 10);
+        }
+        localStorage.setItem("riwayat", JSON.stringify(riwayat));
+      }
+    }
+
+    function tampilkanRiwayat() {
+      let list = document.getElementById("riwayatList");
+      list.innerHTML = "";
+      let riwayatProduk = produk.filter(p => riwayat.includes(p.judul));
+      
+      if (riwayatProduk.length === 0) {
+        list.innerHTML = "<p>Belum ada riwayat produk.</p>";
+      } else {
+        riwayatProduk.sort((a, b) => {
+          return riwayat.indexOf(a.judul) - riwayat.indexOf(b.judul);
+        });
+        
+        riwayatProduk.forEach((p, index) => {
+          let asliIndex = produk.findIndex(prod => prod.judul === p.judul);
+          list.innerHTML += `
+            <div class="produk" onclick="bukaDetail(${asliIndex})">
+              <img src="${p.gambar || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="Gambar Produk" class="${blurMode ? 'blurred' : ''}">
+              <h3>${p.judul}</h3>
+              <p>${p.deskripsi}</p>
+              <div class="harga">Rp ${p.harga}</div>
+              <a href="${p.kontak}" target="_blank" class="btn">💬 Hubungi Penjual</a>
+            </div>
+          `;
+        });
+      }
+    }
+
+    // Fungsi filter dan sorting
+    function filterProduk() {
+      let kategori = document.getElementById("filterKategori").value;
+      let hargaMin = document.getElementById("hargaMin").value;
+      let hargaMax = document.getElementById("hargaMax").value;
+      
+      let hasil = produk.filter(p => {
+        let sesuaiKategori = !kategori || p.kategori === kategori;
+        let sesuaiHargaMin = !hargaMin || p.harga >= hargaMin;
+        let sesuaiHargaMax = !hargaMax || p.harga <= hargaMax;
+        
+        return sesuaiKategori && sesuaiHargaMin && sesuaiHargaMax;
+      });
+      
+      tampilkanProduk(hasil);
+    }
+
+    function sortProduk() {
+      let sortBy = document.getElementById("sortBy").value;
+      let hasil = [...produk];
+      
+      switch(sortBy) {
+        case 'termurah':
+          hasil.sort((a, b) => a.harga - b.harga);
+          break;
+        case 'termahal':
+          hasil.sort((a, b) => b.harga - a.harga);
+          break;
+        case 'rating':
+          hasil.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+          break;
+        case 'terbaru':
+        default:
+          // Default: terbaru (sudah sesuai urutan array)
+          break;
+      }
+      
+      tampilkanProduk(hasil);
+    }
+
+    function cariProduk() {
+      let keyword = document.getElementById("searchBox").value.toLowerCase();
+      let hasil = produk.filter(p => 
+        p.judul.toLowerCase().includes(keyword) || 
+        p.deskripsi.toLowerCase().includes(keyword) ||
+        (p.kategori && p.kategori.toLowerCase().includes(keyword))
+      );
+      tampilkanProduk(hasil);
+    }
+
+    // Fungsi dashboard
+    function openDashboardTab(tabName) {
+      document.querySelectorAll('.dashboard-tab').forEach(tab => {
+        tab.style.display = 'none';
+      });
+      document.querySelectorAll('.tab-menu button').forEach(button => {
+        button.classList.remove('active');
+      });
+      
+      document.getElementById('dashboard' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).style.display = 'block';
+      event.target.classList.add('active');
+      
+      if (tabName === 'produkSaya') {
+        tampilkanProdukSaya();
+      } else if (tabName === 'pesanan') {
+        tampilkanPesanan();
+      }
+    }
+
+    function tampilkanProdukSaya() {
+      let list = document.getElementById("produkSayaList");
+      list.innerHTML = "";
+      let produkSaya = produk.filter(p => p.penjualID === userID);
+      
+      if (produkSaya.length === 0) {
+        list.innerHTML = "<p>Anda belum menambahkan produk.</p>";
+      } else {
+        produkSaya.forEach((p, index) => {
+          let asliIndex = produk.findIndex(prod => prod.judul === p.judul);
+          list.innerHTML += `
+            <div class="produk" onclick="bukaDetail(${asliIndex})">
+              <img src="${p.gambar || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="Gambar Produk" class="${blurMode ? 'blurred' : ''}">
+              <h3>${p.judul}</h3>
+              <p>${p.deskripsi}</p>
+              <div class="harga">Rp ${p.harga}</div>
+              <div class="detail-actions">
+                <button class="btn btn-warning" onclick="event.stopPropagation(); editProduk(${asliIndex})">✏️ Edit</button>
+                <button class="btn btn-secondary" onclick="event.stopPropagation(); hapusProduk(${asliIndex})">🗑️ Hapus</button>
+              </div>
+            </div>
+          `;
+        });
+      }
+      
+      // Update statistik dashboard
+      document.getElementById("totalProduk").textContent = produkSaya.length;
+      document.getElementById("produkAktif").textContent = produkSaya.filter(p => p.status !== 'nonaktif').length;
+      
+      let totalPenjualan = pesanan.filter(p => p.penjualID === userID && p.status === 'selesai').length;
+      document.getElementById("totalPenjualan").textContent = totalPenjualan;
+      
+      let ratings = produkSaya.map(p => p.rating || 0).filter(r => r > 0);
+      let avgRating = ratings.length > 0 ? (ratings.reduce((a, b) => a + b) / ratings.length).toFixed(1) : 0;
+      document.getElementById("ratingAverage").textContent = avgRating;
+    }
+
+    function editProduk(index) {
+      let p = produk[index];
+      document.getElementById("judul").value = p.judul;
+      document.getElementById("deskripsi").value = p.deskripsi;
+      document.getElementById("harga").value = p.harga;
+      document.getElementById("kategori").value = p.kategori;
+      document.getElementById("kontak").value = p.kontak;
+      document.getElementById("metodePembayaran").value = p.metodePembayaran || 'Transfer Bank';
+      document.getElementById("gunakanEscrow").checked = p.gunakanEscrow || false;
+      
+      // Hapus produk lama
+      produk.splice(index, 1);
+      localStorage.setItem("produk", JSON.stringify(produk));
+      
+      showPage('tambah');
+      showNotification('Produk sedang diedit. Silakan perbarui informasi dan posting ulang.');
+    }
+
+    function hapusProduk(index) {
+      if (confirm("Apakah Anda yakin ingin menghapus produk ini?")) {
+        produk.splice(index, 1);
+        localStorage.setItem("produk", JSON.stringify(produk));
+        tampilkanProdukSaya();
+        showNotification('Produk berhasil dihapus');
+      }
+    }
+
+    function tampilkanPesanan() {
+      let list = document.getElementById("pesananList");
+      list.innerHTML = "";
+      let pesananSaya = pesanan.filter(p => p.penjualID === userID);
+      
+      if (pesananSaya.length === 0) {
+        list.innerHTML = "<p>Belum ada pesanan.</p>";
+      } else {
+        pesananSaya.forEach((p, index) => {
+          let statusClass = '';
+          if (p.status === 'diproses') statusClass = 'status-diproses';
+          else if (p.status === 'selesai') statusClass = 'status-selesai';
+          else if (p.status === 'batal') statusClass = 'status-batal';
+          
+          list.innerHTML += `
+            <div class="dashboard-card">
+              <h4>${p.produkJudul} <span class="status-badge ${statusClass}">${p.status}</span></h4>
+              <p>Pembeli: ${p.pembeliID}</p>
+              <p>Harga: Rp ${p.harga}</p>
+              <p>Tanggal: ${new Date(p.tanggal).toLocaleDateString()}</p>
+              <div class="detail-actions">
+                ${p.status === 'diproses' ? `
+                  <button class="btn btn-success" onclick="updateStatusPesanan(${index}, 'selesai')">✔ Selesaikan</button>
+                  <button class="btn btn-secondary" onclick="updateStatusPesanan(${index}, 'batal')">✖ Batalkan</button>
+                ` : ''}
+                <button class="btn btn-warning" onclick="hubungiPembeli('${p.pembeliID}')">💬 Hubungi</button>
+              </div>
+            </div>
+          `;
+        });
+      }
+    }
+
+    function updateStatusPesanan(index, status) {
+      pesanan[index].status = status;
+      localStorage.setItem("pesanan", JSON.stringify(pesanan));
+      tampilkanPesanan();
+      showNotification(`Status pesanan diperbarui menjadi: ${status}`);
+    }
+
+    function hubungiPembeli(pembeliID) {
+      currentChatKey = "chat_" + pembeliID;
+      document.getElementById("chatModalTitle").innerText = "Chat dengan Pembeli";
+      document.getElementById("chatModal").style.display = "flex";
+      displayChat();
+    }
+
+    // Fungsi form produk
+    document.getElementById("produkForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  let judul = document.getElementById("judul").value;
+  let deskripsi = document.getElementById("deskripsi").value;
+  let harga = parseInt(document.getElementById("harga").value); // Pastikan number
+  let kategori = document.getElementById("kategori").value;
+  let kontak = document.getElementById("kontak").value;
+  let metodePembayaran = document.getElementById("metodePembayaran").value;
+  let gunakanEscrow = document.getElementById("gunakanEscrow").checked;
+
+  let fileInput = document.getElementById("gambarFile").files[0];
+  if (fileInput) {
+    let reader = new FileReader();
+    reader.onload = function(evt) {
+      simpanProduk(judul, deskripsi, harga, kategori, kontak, evt.target.result, metodePembayaran, gunakanEscrow);
+    }
+    reader.readAsDataURL(fileInput);
+  } else {
+    simpanProduk(judul, deskripsi, harga, kategori, kontak, null, metodePembayaran, gunakanEscrow);
+  }
+});
+
+    function simpanProduk(judul, deskripsi, harga, kategori, kontak, gambar, metodePembayaran, gunakanEscrow) {
+      produk.push({
+        judul, 
+        deskripsi, 
+        harga, 
+        kategori, 
+        kontak, 
+        gambar,
+        metodePembayaran,
+        gunakanEscrow,
+        penjualID: userID,
+        tanggalPost: new Date().toISOString(),
+        rating: 0,
+        status: 'aktif'
+      });
+      
+      localStorage.setItem("produk", JSON.stringify(produk));
+      showNotification("✅ Produk berhasil ditambahkan!");
+      document.getElementById("produkForm").reset();
+      showPage("home");
+    }
+
+    // FUNGSI CHAT YANG SUDAH DIPERBAIKI
+    function openChatGlobal(){
+      currentChatKey = 'chat_global';
+      document.getElementById("chatModalTitle").innerText = "Global Chat";
+      document.getElementById("chatModal").style.display = "flex";
+      displayChat();
+    }
+
+    function openChatProduk(produk){
+      currentChatKey = "chat_" + produk;
+      document.getElementById("chatModalTitle").innerText = "Chat: " + produk;
+      document.getElementById("chatModal").style.display = "flex";
+      displayChat();
+    }
+
+    function closeChat(){
+      document.getElementById("chatModal").style.display = "none";
+    }
+
+    function displayChat(){
+      let chatData = JSON.parse(localStorage.getItem(currentChatKey)) || [];
+      let chatBox = document.getElementById("chatMessages");
+      chatBox.innerHTML = "";
+      
+      chatData.forEach(msg=>{
+        let div = document.createElement("div");
+        div.style.padding = "5px 8px";
+        div.style.margin = "5px 0";
+        div.style.borderRadius = "5px";
+        div.style.background = msg.sender === userName ? "#007bff" : "#e0e0e0";
+        div.style.color = msg.sender === userName ? "#fff" : "#000";
+        div.style.fontSize = "13px";
+        div.innerText = msg.sender + ": " + msg.text;
+        chatBox.appendChild(div);
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function sendMessage(){
+      let input = document.getElementById("chatInput");
+      let pesan = input.value.trim();
+      if(!pesan) return;
+
+      let chatData = JSON.parse(localStorage.getItem(currentChatKey)) || [];
+      chatData.push({sender:userName, text:pesan, time: new Date().toISOString()});
+      localStorage.setItem(currentChatKey, JSON.stringify(chatData));
+      input.value = "";
+      displayChat();
+
+      // Balasan otomatis untuk chat produk
+      if(currentChatKey.startsWith("chat_") && currentChatKey !== "chat_global"){
+        setTimeout(()=>{
+          chatData.push({sender:"Penjual", text:"Terima kasih! Pesananmu sedang diproses.", time: new Date().toISOString()});
+          localStorage.setItem(currentChatKey, JSON.stringify(chatData));
+          displayChat();
+        }, 1000);
+      }
+    }
+
+    // Fungsi notifikasi
+    function showNotification(message) {
+      let notif = document.getElementById("notification");
+      notif.innerText = message;
+      notif.style.display = "block";
+      setTimeout(() => {
+        notif.style.display = "none";
+      }, 3000);
+    }
+
+    // Inisialisasi
+    updateOnlineStatus();
+    tampilkanProduk(produk);
+    
+    // ===== VARIABEL & DATA BARU =====
+let darkMode = localStorage.getItem("darkMode") === "true";
+let language = localStorage.getItem("language") || "id";
+let achievements = JSON.parse(localStorage.getItem("achievements")) || [];
+let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+let auctions = JSON.parse(localStorage.getItem("auctions")) || [];
+let userReputation = parseInt(localStorage.getItem("userReputation")) || 0;
+let lastSync = localStorage.getItem("lastSync") || null;
+let searchHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
+let sessionStartTime = Date.now();
+
+// ===== INISIALISASI FITUR BARU =====
+document.getElementById('darkMode').checked = darkMode;
+document.getElementById('languageSelect').value = language;
+if (darkMode) document.body.classList.add('dark-mode');
+updateAchievementDisplay();
+checkForNewNotifications();
+
+// ===== DARK MODE =====
+function toggleDarkMode() {
+  darkMode = !darkMode;
+  document.body.classList.toggle('dark-mode', darkMode);
+  localStorage.setItem("darkMode", darkMode);
+  
+  // Achievement: Night Owl
+  if (darkMode) unlockAchievement('night_owl');
+}
+
+// ===== MULTI-LANGUAGE =====
+const translations = {
+  id: {
+    welcome: "Selamat Datang",
+    search: "Cari produk...",
+    addProduct: "Tambah Produk",
+    home: "Home",
+    dashboard: "Dashboard",
+    favorite: "Favorit",
+    wishlist: "Wishlist",
+    history: "Riwayat"
+  },
+  en: {
+    welcome: "Welcome",
+    search: "Search products...",
+    addProduct: "Add Product",
+    home: "Home",
+    dashboard: "Dashboard", 
+    favorite: "Favorite",
+    wishlist: "Wishlist",
+    history: "History"
+  }
+};
+
+function changeLanguage() {
+  language = document.getElementById('languageSelect').value;
+  localStorage.setItem("language", language);
+  applyTranslations();
+}
+
+function applyTranslations() {
+  document.querySelector('input[placeholder="Cari produk..."]').placeholder = translations[language].search;
+  // Update teks lainnya berdasarkan language
+  const elements = document.querySelectorAll('[data-translate]');
+  elements.forEach(el => {
+    const key = el.getAttribute('data-translate');
+    if (translations[language][key]) {
+      el.textContent = translations[language][key];
+    }
+  });
+}
+
+// ===== ACHIEVEMENT SYSTEM =====
+function unlockAchievement(achievementId) {
+  if (!achievements.includes(achievementId)) {
+    achievements.push(achievementId);
+    localStorage.setItem("achievements", JSON.stringify(achievements));
+    showNotification(`🎉 Achievement Unlocked: ${getAchievementName(achievementId)}`);
+    updateAchievementDisplay();
+    updateReputation(10, 'achievement'); // Tambah reputasi
+  }
+}
+
+function getAchievementName(id) {
+  const achievementNames = {
+    'first_sale': 'Penjual Pertama',
+    'night_owl': 'Night Owl',
+    'power_user': 'Power User',
+    'reviewer': 'Reviewer Aktif',
+    'trusted_member': 'Anggota Terpercaya',
+    'marketplace_expert': 'Expert Marketplace',
+    'first_visit': 'Pengunjung Pertama'
+  };
+  return achievementNames[id] || id;
+}
+
+function updateAchievementDisplay() {
+  const display = document.getElementById('achievementDisplay');
+  if (achievements.length > 0) {
+    display.innerHTML = `🏆 Achievements: ${achievements.slice(0, 3).map(a => getAchievementName(a)).join(', ')}${achievements.length > 3 ? '...' : ''}`;
+  }
+}
+
+// ===== ADVANCED SEARCH =====
+function toggleAdvancedSearch() {
+  const panel = document.getElementById('advancedSearchPanel');
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function advancedSearch() {
+  const rating = parseInt(document.getElementById('searchRating').value);
+  const verified = document.getElementById('searchVerified').value;
+  const sortBy = document.getElementById('searchSort').value;
+  
+  let results = produk.filter(p => {
+    const meetsRating = (p.rating || 0) >= rating;
+    const meetsVerified = !verified || (p.sellerReputation > 50);
+    return meetsRating && meetsVerified;
+  });
+  
+  // Sorting
+  switch(sortBy) {
+    case 'reputasi':
+      results.sort((a, b) => (b.sellerReputation || 0) - (a.sellerReputation || 0));
+      break;
+    case 'popularitas':
+      results.sort((a, b) => (b.views || 0) - (a.views || 0));
+      break;
+    case 'terbaru':
+      results.sort((a, b) => new Date(b.tanggalPost) - new Date(a.tanggalPost));
+      break;
+  }
+  
+  tampilkanProduk(results);
+}
+
+// ===== AI RECOMMENDATION SYSTEM =====
+function getRecommendedProducts() {
+  const userPreferences = analyzeUserBehavior();
+  return produk.filter(product => {
+    let score = 0;
+    
+    // Berdasarkan riwayat pencarian
+    if (searchHistory.some(term => 
+      product.judul.toLowerCase().includes(term.toLowerCase()) ||
+      product.deskripsi.toLowerCase().includes(term.toLowerCase())
+    )) score += 10;
+    
+    // Berdasarkan kategori favorit
+    if (userPreferences.favoriteCategories.includes(product.kategori)) score += 5;
+    
+    // Berdasarkan harga range preference
+    if (product.harga >= userPreferences.priceRange.min && 
+        product.harga <= userPreferences.priceRange.max) score += 3;
+        
+    return score > 5;
+  }).slice(0, 6);
+}
+
+function analyzeUserBehavior() {
+  const categories = produk.filter(p => favorit.includes(p.judul)).map(p => p.kategori);
+  const favoriteCategories = [...new Set(categories)];
+  
+  const prices = produk.filter(p => riwayat.includes(p.judul)).map(p => p.harga);
+  const avgPrice = prices.length ? prices.reduce((a, b) => a + b) / prices.length : 50000;
+  
+  return {
+    favoriteCategories,
+    priceRange: {
+      min: avgPrice * 0.5,
+      max: avgPrice * 1.5
+    }
+  };
+}
+
+// ===== AUCTION SYSTEM =====
+function showAuctions() {
+  const list = document.getElementById('auctionList');
+  list.innerHTML = '';
+  
+  if (auctions.length === 0) {
+    list.innerHTML = '<p>Belum ada produk lelang.</p>';
+    return;
+  }
+  
+  auctions.forEach((auction, index) => {
+    const timeLeft = auction.endTime - Date.now();
+    const hoursLeft = Math.max(0, Math.floor(timeLeft / (1000 * 60 * 60)));
+    
+    list.innerHTML += `
+      <div class="produk">
+        <div class="countdown">⏳ ${hoursLeft} jam lagi</div>
+        <img src="${auction.gambar || 'https://via.placeholder.com/250x150?text=Lelang'}" alt="${auction.judul}">
+        <h3>${auction.judul}</h3>
+        <p>${auction.deskripsi}</p>
+        <div class="harga">Tawaran: Rp ${auction.currentBid}</div>
+        <button class="btn" onclick="placeBid(${index}, ${auction.currentBid + 1000}, '${userID}')">🚀 Tawar Rp ${auction.currentBid + 1000}</button>
+      </div>
+    `;
+  });
+}
+
+function placeBid(auctionIndex, bidAmount, bidderId) {
+  const auction = auctions[auctionIndex];
+  if (bidAmount > auction.currentBid) {
+    auction.currentBid = bidAmount;
+    auction.highestBidder = bidderId;
+    auction.bids.push({ bidder: bidderId, amount: bidAmount, time: Date.now() });
+    localStorage.setItem("auctions", JSON.stringify(auctions));
+    
+    showNotification(`✅ Bid berhasil! Anda sekarang menjadi highest bidder.`);
+    showAuctions();
+    
+    // Achievement: First Bid
+    unlockAchievement('first_bid');
+  } else {
+    showNotification('❌ Bid harus lebih tinggi dari tawaran saat ini');
+  }
+}
+
+// ===== CLOUD SYNC =====
+async function syncWithCloud() {
+  document.getElementById('syncStatus').style.display = 'block';
+  
+  try {
+    // Simulasi sync dengan timeout
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    const syncData = {
+      produk, favorit, wishlist, riwayat, reviews, achievements, auctions,
+      lastSync: Date.now()
+    };
+    
+    // Simpan ke localStorage sebagai backup
+    localStorage.setItem('cloudBackup', JSON.stringify(syncData));
+    lastSync = Date.now();
+    localStorage.setItem("lastSync", lastSync);
+    
+    showNotification('✅ Data berhasil disinkronisasi');
+  } catch (error) {
+    showNotification('❌ Gagal sinkronisasi');
+  } finally {
+    document.getElementById('syncStatus').style.display = 'none';
+  }
+}
+
+// ===== REPUTATION SYSTEM =====
+function updateReputation(points, reason) {
+  userReputation += points;
+  localStorage.setItem("userReputation", userReputation.toString());
+  
+  // Achievement berdasarkan reputasi
+  if (userReputation >= 100) unlockAchievement('trusted_member');
+  if (userReputation >= 500) unlockAchievement('marketplace_expert');
+}
+
+// ===== REAL-TIME NOTIFICATIONS =====
+function checkForNewNotifications() {
+  // Cek pesan baru
+  const unreadMessages = calculateUnreadMessages();
+  if (unreadMessages > 0) {
+    document.getElementById('notifHome').style.display = 'inline';
+    document.getElementById('notifHome').textContent = unreadMessages;
+  }
+  
+  // Cek pesanan baru untuk dashboard
+  const newOrders = pesanan.filter(p => p.status === 'diproses' && !p.notified).length;
+  if (newOrders > 0) {
+    document.getElementById('notifDashboard').style.display = 'inline';
+    document.getElementById('notifDashboard').textContent = newOrders;
+  }
+}
+
+function calculateUnreadMessages() {
+  let unread = 0;
+  const chatKeys = Object.keys(localStorage).filter(key => key.startsWith('chat_'));
+  
+  chatKeys.forEach(key => {
+    const messages = JSON.parse(localStorage.getItem(key)) || [];
+    const lastRead = localStorage.getItem(`lastRead_${key}`) || 0;
+    unread += messages.filter(msg => new Date(msg.time) > new Date(lastRead)).length;
+  });
+  
+  return unread;
+}
+
+// ===== ANALYTICS =====
+function showAnalytics() {
+  const totalViews = produk.reduce((sum, p) => sum + (p.views || 0), 0);
+  const conversionRate = riwayat.length > 0 ? Math.round((favorit.length / riwayat.length) * 100) : 0;
+  const avgSession = calculateSessionTime();
+  
+  document.getElementById('totalViews').textContent = totalViews;
+  document.getElementById('conversionRate').textContent = conversionRate + '%';
+  document.getElementById('avgSession').textContent = avgSession + 'm';
+}
+
+function trackProductView(productId) {
+  const product = produk.find(p => p.judul === productId);
+  if (product) {
+    product.views = (product.views || 0) + 1;
+    localStorage.setItem("produk", JSON.stringify(produk));
+  }
+}
+
+function calculateSessionTime() {
+  const sessionTime = Date.now() - sessionStartTime;
+  return Math.round(sessionTime / 60000);
+}
+
+// ===== MODIFIKASI FUNGSI YANG SUDAH ADA =====
+
+// Update fungsi showPage untuk halaman baru
+function showPage(page) {
+  // Sembunyikan semua halaman
+  const pages = ['home', 'tambah', 'detail', 'dashboard', 'favorit', 'wishlist', 'riwayat', 'auction', 'analytics', 'reviews'];
+  pages.forEach(p => {
+    document.getElementById(p + 'Page').style.display = 'none';
+  });
+  
+  // Tampilkan halaman yang dipilih
+  document.getElementById(page + 'Page').style.display = 'block';
+  
+  // Load data khusus halaman
+  if (page === "home") {
+    tampilkanProduk(produk);
+    showAIRecommendations();
+  }
+  if (page === "favorit") tampilkanFavorit();
+  if (page === "wishlist") tampilkanWishlist();
+  if (page === "riwayat") tampilkanRiwayat();
+  if (page === "dashboard") {
+    openDashboardTab('produkSaya');
+    tampilkanProdukSaya();
+  }
+  if (page === "auction") showAuctions();
+  if (page === "analytics") showAnalytics();
+}
+
+function showAIRecommendations() {
+  const recommended = getRecommendedProducts();
+  if (recommended.length > 0) {
+    let recSection = document.getElementById('aiRecommendationsSection');
+    if (!recSection) {
+      recSection = document.createElement('div');
+      recSection.id = 'aiRecommendationsSection';
+      recSection.innerHTML = `<h3>🎯 Rekomendasi Untuk Anda</h3><div class="produk-grid" id="aiRecommendations"></div>`;
+      document.getElementById('homePage').insertBefore(recSection, document.getElementById('homePage').firstChild);
+    }
+    
+    document.getElementById('aiRecommendations').innerHTML = '';
+    recommended.forEach((p) => {
+      const asliIndex = produk.findIndex(prod => prod.judul === p.judul);
+      document.getElementById('aiRecommendations').innerHTML += `
+        <div class="produk" onclick="bukaDetail(${asliIndex})">
+          <img src="${p.gambar || 'https://via.placeholder.com/250x150?text=Rekomendasi'}" alt="${p.judul}">
+          <h3>${p.judul}</h3>
+          <p>${p.deskripsi.substring(0, 50)}...</p>
+          <div class="harga">Rp ${p.harga}</div>
+        </div>
+      `;
+    });
+  }
+}
+
+// Update fungsi bukaDetail untuk tracking views
+function bukaDetail(index) {
+  let p = produk[index];
+  tambahRiwayat(p.judul);
+  trackProductView(p.judul); // TRACK VIEWS
+  
+  // ... kode existing bukaDetail tetap di sini ...
+}
+
+// ===== AUTO-SYNC & INIT =====
+setInterval(syncWithCloud, 5 * 60 * 1000); // Sync setiap 5 menit
+
+window.addEventListener('load', function() {
+  applyTranslations();
+  syncWithCloud();
+  
+  // Achievement: First Visit
+  if (!localStorage.getItem('firstVisit')) {
+    unlockAchievement('first_visit');
+    localStorage.setItem('firstVisit', 'true');
+  }
+  
+  // Achievement: Power User (jika banyak aktivitas)
+  if (produk.length > 10 || favorit.length > 20) {
+    unlockAchievement('power_user');
+  }
+});
+
+// ===== FUNGSI showPage YANG DIPERBAIKI =====
+function showPage(page) {
+  // Sembunyikan semua halaman KECUALI detailPage (karena detailPage punya logic sendiri)
+  const pages = ['home', 'tambah', 'dashboard', 'favorit', 'wishlist', 'riwayat', 'auction', 'analytics', 'reviews'];
+  pages.forEach(p => {
+    document.getElementById(p + 'Page').style.display = 'none';
+  });
+  
+  // Khusus detailPage, biarkan logic bukaDetail yang mengatur
+  if (page !== 'detail') {
+    document.getElementById('detailPage').style.display = 'none';
+  }
+  
+  // Tampilkan halaman yang dipilih
+  if (page !== 'detail') {
+    document.getElementById(page + 'Page').style.display = 'block';
+  }
+  
+  // Load data khusus halaman
+  if (page === "home") {
+    tampilkanProduk(produk);
+    showAIRecommendations();
+  }
+  if (page === "favorit") tampilkanFavorit();
+  if (page === "wishlist") tampilkanWishlist();
+  if (page === "riwayat") tampilkanRiwayat();
+  if (page === "dashboard") {
+    openDashboardTab('produkSaya');
+    tampilkanProdukSaya();
+  }
+  if (page === "auction") showAuctions();
+  if (page === "analytics") showAnalytics();
+}
+
+// ===== FUNGSI bukaDetail YANG DIPERBAIKI =====
+function bukaDetail(index) {
+  let p = produk[index];
+  tambahRiwayat(p.judul);
+  trackProductView(p.judul);
+  
+  document.getElementById("detailContent").innerHTML = `
+    <img src="${p.gambar || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="Gambar Produk" class="${blurMode ? 'blurred' : ''}">
+    <div class="detail-info">
+      <h2>${p.judul}</h2>
+      <p>${p.deskripsi}</p>
+      <div class="harga">Rp ${p.harga}</div>
+      <div><strong>Kategori:</strong> ${p.kategori}</div>
+      <div><strong>Metode Pembayaran:</strong> ${p.metodePembayaran || 'Transfer Bank'}</div>
+      <div class="rating">${generateRating(p.rating || 0)}</div>
+      <div class="detail-actions">
+        <a href="${p.kontak}" target="_blank" class="btn">💬 Hubungi Penjual</a>
+        <button class="btn btn-secondary" onclick="openChatProduk('${p.judul}')">💬 Chat Produk</button>
+        <button class="btn btn-warning" onclick="toggleWishlist(null, '${p.judul}')">⭐ Wishlist</button>
+        ${p.gunakanEscrow ? '<span class="encryption-badge">Escrow</span>' : ''}
+      </div>
+    </div>
+  `;
+  
+  // YANG INI HARUS DIPANGGIL: Tampilkan halaman detail
+  showPage('detail');
+  document.getElementById('detailPage').style.display = 'block';
+  
+  // Tampilkan produk serupa
+  tampilkanProdukSerupa(p.kategori, p);
+}
+
+// ===== VARIABEL PRODUK DIGITAL =====
+let digitalProducts = JSON.parse(localStorage.getItem("digitalProducts")) || [];
+let emailTemplates = JSON.parse(localStorage.getItem("emailTemplates")) || [];
+
+// ===== TOGGLE FIELD DIGITAL =====
+function toggleDigitalFields() {
+  const tipe = document.getElementById('tipeProduk').value;
+  document.getElementById('digitalFields').style.display = tipe === 'digital' ? 'block' : 'none';
+}
+
+// ===== SIMPAN PRODUK DIGITAL =====
+function simpanProdukDigital(judul, deskripsi, harga, kategori, kontak, gambar, fileDigital, emailTemplate) {
+  const productId = 'DIGI_' + Date.now();
+  
+  const digitalProduct = {
+    id: productId,
+    judul, 
+    deskripsi, 
+    harga, 
+    kategori, 
+    kontak, 
+    gambar,
+    tipe: 'digital',
+    fileData: fileDigital,
+    emailTemplate: emailTemplate || `Halo {nama}, terima kasih telah membeli {produk}. Download link: {link}`,
+    autoSend: document.getElementById('autoSend').checked,
+    tanggalPost: new Date().toISOString(),
+    penjualID: userID,
+    downloadCount: 0,
+    status: 'aktif'
+  };
+  
+  digitalProducts.push(digitalProduct);
+  localStorage.setItem("digitalProducts", JSON.stringify(digitalProducts));
+  
+  // Juga simpan ke produk biasa untuk tampilan
+  produk.push({
+    judul, deskripsi, harga, kategori, kontak, gambar,
+    tipe: 'digital',
+    digitalId: productId,
+    penjualID: userID,
+    tanggalPost: new Date().toISOString()
+  });
+  
+  localStorage.setItem("produk", JSON.stringify(produk));
+  return productId;
+}
+
+// ===== MODAL EMAIL =====
+let currentDigitalProduct = null;
+
+function showEmailModal(productId) {
+  currentDigitalProduct = digitalProducts.find(p => p.id === productId);
+  if (!currentDigitalProduct) return;
+  
+  document.getElementById('emailModal').style.display = 'block';
+}
+
+function closeEmailModal() {
+  document.getElementById('emailModal').style.display = 'none';
+  currentDigitalProduct = null;
+}
+
+// ===== KIRIM PRODUK DIGITAL =====
+function sendDigitalProduct() {
+  const buyerEmail = document.getElementById('buyerEmail').value;
+  if (!buyerEmail || !validateEmail(buyerEmail)) {
+    showNotification('Email tidak valid!');
+    return;
+  }
+
+  if (!currentDigitalProduct) return;
+
+  // Generate unique download link
+  const downloadToken = generateToken();
+  const downloadLink = `${window.location.origin}/download/${currentDigitalProduct.id}?token=${downloadToken}`;
+  
+  // Simpan record pengiriman
+  const deliveryRecord = {
+    productId: currentDigitalProduct.id,
+    buyerEmail: buyerEmail,
+    downloadToken: downloadToken,
+    sentAt: new Date().toISOString(),
+    status: 'sent',
+    downloadCount: 0
+  };
+  
+  let deliveries = JSON.parse(localStorage.getItem("productDeliveries")) || [];
+  deliveries.push(deliveryRecord);
+  localStorage.setItem("productDeliveries", JSON.stringify(deliveries));
+  
+  // Kirim email (simulasi)
+  sendEmailSimulation(buyerEmail, currentDigitalProduct, downloadLink);
+  
+  closeEmailModal();
+  showNotification('✅ Produk digital telah dikirim ke ' + buyerEmail);
+}
+
+// ===== SIMULASI PENGIRIMAN EMAIL =====
+function sendEmailSimulation(email, product, downloadLink) {
+  const emailContent = product.emailTemplate
+    .replace('{nama}', 'Pembeli')
+    .replace('{produk}', product.judul)
+    .replace('{link}', downloadLink);
+  
+  console.log('📧 Email dikirim ke:', email);
+  console.log('Content:', emailContent);
+  console.log('Download Link:', downloadLink);
+  
+  // Simpan riwayat email
+  let emailHistory = JSON.parse(localStorage.getItem("emailHistory")) || [];
+  emailHistory.push({
+    to: email,
+    product: product.judul,
+    sentAt: new Date().toISOString(),
+    content: emailContent
+  });
+  localStorage.setItem("emailHistory", JSON.stringify(emailHistory));
+}
+
+// ===== GENERATE DOWNLOAD LINK =====
+function generateToken() {
+  return Math.random().toString(36).substr(2, 15) + Date.now().toString(36);
+}
+
+// ===== VALIDASI EMAIL =====
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+// ===== TAMPILKAN PRODUK DIGITAL =====
+function tampilkanProdukDigital() {
+  const digitalProds = produk.filter(p => p.tipe === 'digital');
+  tampilkanProduk(digitalProds);
+}
+
+// ===== MODIFIKASI BUKA DETAIL UNTUK DIGITAL =====
+function bukaDetail(index) {
+  let p = produk[index];
+  tambahRiwayat(p.judul);
+  trackProductView(p.judul);
+  
+  let digitalBadge = p.tipe === 'digital' ? '<span class="digital-badge">DIGITAL</span>' : '';
+  let digitalActions = '';
+  
+  if (p.tipe === 'digital') {
+    const digitalProduct = digitalProducts.find(d => d.id === p.digitalId);
+    digitalActions = `
+      <div class="detail-actions">
+        <button class="btn btn-success" onclick="showEmailModal('${p.digitalId}')">📧 Kirim ke Email</button>
+        <button class="btn btn-warning" onclick="generateDownloadLink('${p.digitalId}')">🔗 Generate Link</button>
+        <span class="email-status email-pending">Terkirim: ${getDeliveryCount(p.digitalId)}x</span>
+      </div>
+    `;
+  }
+  
+  document.getElementById("detailContent").innerHTML = `
+    <img src="${p.gambar || 'https://via.placeholder.com/250x150?text=No+Image'}" alt="Gambar Produk" class="${blurMode ? 'blurred' : ''}">
+    <div class="detail-info">
+      <h2>${p.judul} ${digitalBadge}</h2>
+      <p>${p.deskripsi}</p>
+      <div class="harga">Rp ${p.harga}</div>
+      <div><strong>Kategori:</strong> ${p.kategori}</div>
+      <div><strong>Tipe:</strong> ${p.tipe === 'digital' ? 'Digital (Instant Delivery)' : 'Fisik'}</div>
+      ${digitalActions}
+      <div class="detail-actions">
+        <a href="${p.kontak}" target="_blank" class="btn">💬 Hubungi Penjual</a>
+        <button class="btn btn-secondary" onclick="openChatProduk('${p.judul}')">💬 Chat Produk</button>
+        <button class="btn btn-warning" onclick="toggleWishlist(null, '${p.judul}')">⭐ Wishlist</button>
+      </div>
+    </div>
+  `;
+  
+  showPage('detail');
+  document.getElementById('detailPage').style.display = 'block';
+  tampilkanProdukSerupa(p.kategori, p);
+}
+
+// === DATA AFFILIATE === 
+let affiliateData = JSON.parse(localStorage.getItem("affiliateData")) || {
+  referrals: [],
+  commissions: [],
+  settings: {
+    commissionRate: 10, // 10% dari harga produk
+    minPayout: 50000, // Minimal payout Rp 50,000
+    cookieDuration: 30 // Hari
+  }
+};
+
+let userAffiliateCode = localStorage.getItem("userAffiliateCode") || generateAffiliateCode();
+
+// Generate kode affiliate unik
+function generateAffiliateCode() {
+  const code = 'SANNZ' + Math.random().toString(36).substr(2, 6).toUpperCase();
+  localStorage.setItem("userAffiliateCode", code);
+  return code;
+}
+
+// Cek kode referral dari URL
+function checkReferralFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const refCode = urlParams.get('ref');
+  
+  if (refCode && !localStorage.getItem('referredBy')) {
+    localStorage.setItem('referredBy', refCode);
+    localStorage.setItem('referralDate', new Date().toISOString());
+    showNotification('🎉 Bergabung via referral! Dapatkan komisi khusus.');
+  }
+}
+
+// Jalankan sekali untuk memperbaiki data existing
+function fixExistingProducts() {
+  let needsFix = false;
+  produk.forEach(p => {
+    if (!p.metodePembayaran) {
+      p.metodePembayaran = 'Transfer Bank';
+      p.gunakanEscrow = p.gunakanEscrow || false;
+      needsFix = true;
+    }
+  });
+  
+  if (needsFix) {
+    localStorage.setItem("produk", JSON.stringify(produk));
+    showNotification('Data produk telah diperbaiki');
+  }
+}
+
+// Panggil saat load
+fixExistingProducts();
+
+function simpanProduk(judul, deskripsi, harga, kategori, kontak, gambar, metodePembayaran, gunakanEscrow) {
+  console.log('Menyimpan produk dengan metode pembayaran:', metodePembayaran);
+  console.log('Gunakan Escrow:', gunakanEscrow);
+  
+  produk.push({
+    judul, 
+    deskripsi, 
+    harga, 
+    kategori, 
+    kontak, 
+    gambar,
+    metodePembayaran: metodePembayaran || 'Transfer Bank',
+    gunakanEscrow: gunakanEscrow || false,
+    penjualID: userID,
+    tanggalPost: new Date().toISOString(),
+    rating: 0,
+    status: 'aktif'
+  });
+  
+  localStorage.setItem("produk", JSON.stringify(produk));
+  showNotification("✅ Produk berhasil ditambahkan!");
+  document.getElementById("produkForm").reset();
+  showPage("home");
+}
+  </script>
+</body>
+</html>
